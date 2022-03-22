@@ -23,9 +23,9 @@ public class BankAccountServiceImpl implements BankAccountService {
     private final UserService userService;
 
     public BankAccountServiceImpl(BankAccountRepository repository, BankService bankService, UserService userService){
-        this.repository = repository;
-        this.bankService = bankService;
-        this.userService = userService;
+        this.repository = repository; //comment1.
+        this.bankService = bankService; //comment2.
+        this.userService = userService; //comment3.
     }
 
     ApiResponse response = new ApiResponse();
