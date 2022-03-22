@@ -25,8 +25,8 @@ public class AtmServiceImpl implements AtmService {
     private final BankService bankService;
 
     public AtmServiceImpl(AtmRepository repository, BankService bankService){
-        this.repository = repository;
-        this.bankService = bankService;
+        this.repository = repository; //comment in main branch.
+        this.bankService = bankService; //comment in main branch.
     }
 
     ApiResponse response = new ApiResponse();
