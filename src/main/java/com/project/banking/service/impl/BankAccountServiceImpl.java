@@ -18,15 +18,14 @@ import java.util.List;
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
 
-    private final BankAccountRepository repository;
-    private final BankService bankService;
-    private final UserService userService;
+    @Autowired
+    private BankAccountRepository repository;
 
-    public BankAccountServiceImpl(BankAccountRepository repository, BankService bankService, UserService userService){
-        this.repository = repository;
-        this.bankService = bankService;
-        this.userService = userService;
-    }
+    @Autowired
+    private BankService bankService;
+
+    @Autowired
+    private UserService userService;
 
     ApiResponse response = new ApiResponse();
 
