@@ -15,11 +15,20 @@ import java.util.List;
 @Service
 public class AtmServiceImpl implements AtmService {
 
-    @Autowired
-    private AtmRepository repository;
+//    @Autowired
+//    private AtmRepository repository;
+//
+//    @Autowired
+//    BankService bankService;
 
-    @Autowired
-    BankService bankService;
+    private final AtmRepository repository;
+    private final BankService bankService;
+
+    public AtmServiceImpl(AtmRepository repository, BankService bankService){
+        this.repository = repository;
+        this.bankService = bankService;
+    }
+
     ApiResponse response = new ApiResponse();
 
     @Override
