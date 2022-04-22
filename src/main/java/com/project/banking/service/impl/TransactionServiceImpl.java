@@ -5,6 +5,8 @@ import com.project.banking.repository.TransactionRepository;
 import com.project.banking.response.*;
 import com.project.banking.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
@@ -392,5 +394,10 @@ public class TransactionServiceImpl implements TransactionService {
         response.setStatus("success");
         response.setTransactionLogList(transactionLogList);
         return response;
+    }
+
+    @Override
+    public Page<Transaction> getTransactionPage(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }

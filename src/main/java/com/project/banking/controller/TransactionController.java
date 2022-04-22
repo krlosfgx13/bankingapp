@@ -2,13 +2,19 @@ package com.project.banking.controller;
 
 import com.project.banking.model.BankAccount;
 import com.project.banking.model.Transaction;
+import com.project.banking.repository.TransactionRepository;
 import com.project.banking.request.TransactionRequest;
 import com.project.banking.response.ApiResponse;
 import com.project.banking.response.BalanceInquiryResponse;
 import com.project.banking.response.TransactionLogResponse;
 import com.project.banking.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -16,6 +22,9 @@ public class TransactionController {
 
     @Autowired
     TransactionService service;
+
+    @Autowired
+    TransactionRepository repository;
 
     @PostMapping("/transaction/depositMoney")
     public ApiResponse depositMoney(@RequestBody TransactionRequest transaction){
@@ -83,5 +92,15 @@ public class TransactionController {
         }catch (Exception ex){
             return null;
         }
+    }
+
+    @GetMapping("/transaction/getTransactionPage")
+    public Page<Transaction> getTransactionPage(@RequestParam int pageNo, @RequestParam int pageSize){
+        return service.getTransactionPage(PageRequest.of(pageNo, pageSize));
+    }
+
+    @GetMapping("/transaction/getAllTransactions")
+    public List<Transaction> getAllTransactions(){
+        return repository.findAll();
     }
 }
