@@ -23,11 +23,11 @@ public class AtmController {
     public ApiResponse createAtm(@RequestBody Atm atm){
         try{
             if(atm.getAddress() == "" || atm.getBankId() == null || atm.getCashAvailable() == 0.0){
-                return new ApiResponse(500, "Llenar campos obligatorios", "error");
+                return new ApiResponse(500, "Fill out mandatory fields.", "error");
             }
             return service.createAtm(atm);
         }catch (Exception ex){
-            return new ApiResponse(500, "Ha ocurrido un error", "error");
+            return new ApiResponse(500, "Something went wrong.", "error");
         }
     }
 

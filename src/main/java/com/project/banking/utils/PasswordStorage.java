@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
-public class Utils {
+public class PasswordStorage {
 
     public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
 

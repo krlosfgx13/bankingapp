@@ -3,21 +3,21 @@ package com.project.banking.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="banco", schema = "bankingapp")
+@Table(name="bank", schema = "bankingapp")
 public class Bank {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdBanco")
+    @Column(name = "bank_id")
     private Integer bankId;
 
-    @Column(name = "Nombre")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "Direccion")
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "EfectivoDisponible")
+    @Column(name = "cash_available")
     private float cashAvailable;
 
     public Integer getBankId() {

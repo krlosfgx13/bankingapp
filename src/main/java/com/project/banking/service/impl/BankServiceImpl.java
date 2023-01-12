@@ -38,7 +38,7 @@ public class BankServiceImpl implements BankService {
     public ApiResponse createBank(Bank bank, List<Integer> bankCurrencies) {
         try {
             if(bank.getAddress() == "" || bank.getName() == ""){
-                response.setMessage("Completar campos obligatorios.");
+                response.setMessage("Fill out mandatory fields.");
                 response.setCode(500);
                 return response;
             }
@@ -53,14 +53,14 @@ public class BankServiceImpl implements BankService {
                         bankCurrency.setCurrencyId(currencyId);
                         bankCurrencyService.createBankCurrency(bankCurrency);
                     }
-                    response.setMessage("Operacion realizada con exito.");
+                    response.setMessage("Operation performed successfully.");
                     response.setCode(200);
                 } else {
-                    response.setMessage("No pueden haber mas de 10 bancos.");
+                    response.setMessage("There can't be more than 10 banks..");
                     response.setCode(500);
                 }
             } else {
-                response.setMessage("Seleccionar al menos una moneda.");
+                response.setMessage("Select at least one currency.");
                 response.setCode(500);
             }
             response.setStatus("success");
@@ -78,12 +78,12 @@ public class BankServiceImpl implements BankService {
                 bankObj.setCashAvailable(amount);
                 repository.save(bankObj);
             } else {
-                return new ApiResponse(500, "Ha ocurrido un error.", "error");
+                return new ApiResponse(500, "Something went wrong.", "error");
             }
         } catch (Exception ex) {
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito..", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
@@ -93,12 +93,12 @@ public class BankServiceImpl implements BankService {
             if (bank != null) {
                 repository.delete(bank);
             } else {
-                return new ApiResponse(500, "Ha ocurrido un error.", "error");
+                return new ApiResponse(500, "Something went wrong.", "error");
             }
         } catch (Exception ex) {
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito.", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
@@ -157,13 +157,13 @@ public class BankServiceImpl implements BankService {
                 bankCurrencyDataList.add(bankCurrencyData);
             }
         } catch (Exception ex) {
-            System.out.println("Ha ocurrido un error: " + ex.getMessage());
+            System.out.println("Something went wrong: " + ex.getMessage());
             throw ex;
         } finally {
             conn.close();
         }
         response.setCode(200);
-        response.setMessage("Operacion realizada con exito.");
+        response.setMessage("Operation performed successfully.");
         response.setStatus("success");
         response.setBankCurrencyDataList(bankCurrencyDataList);
         return response;

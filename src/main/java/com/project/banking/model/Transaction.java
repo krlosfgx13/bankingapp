@@ -3,30 +3,30 @@ package com.project.banking.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Transaccion", schema = "bankingapp")
+@Table(name = "banking_transaction", schema = "bankingapp")
 public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdTransaccion")
+    @Column(name = "banking_transaction_id")
     private Integer transactionId;
 
-    @Column(name = "IdTipoTransaccion")
+    @Column(name = "transaction_type_id")
     private Integer transactionTypeId;
 
-    @Column(name = "Monto")
+    @Column(name = "amount")
     private float amount;
 
-    @Column(name = "IdCajero")
+    @Column(name = "atm_id")
     private Integer atmId;
 
-    @Column(name = "IdBanco")
+    @Column(name = "bank_id")
     private Integer bankId;
 
-    @Column(name = "IdCuentaBancaria")
+    @Column(name = "bank_account_id")
     private Integer bankAccountId;
 
-    @Column(name = "IdMoneda")
+    @Column(name = "currency_id")
     private Integer currencyId;
 
     public Integer getTransactionId() {

@@ -1,8 +1,5 @@
 package com.project.banking.service.impl;
 
-import com.project.banking.model.Atm;
-import com.project.banking.model.Bank;
-import com.project.banking.model.BankCurrency;
 import com.project.banking.model.Person;
 import com.project.banking.repository.PersonRepository;
 import com.project.banking.response.ApiResponse;
@@ -23,21 +20,21 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public ApiResponse createPerson(Person person) {
         try{
-            String dpi = person.getDpi().toString();
+            String dpi = person.getPersonId().toString();
             if(dpi.length() == 13){
                 if(person.getFirstName() == "" || person.getFirstLastName() == "" ||
                         person.getAddress() == ""){
-                    response.setMessage("Llenar campos obligatorios.");
+                    response.setMessage("Fill out mandatory fields.");
                     response.setCode(500);
                     response.setStatus("error");
                     return response;
                 }
                 repository.save(person);
-                response.setMessage("Operacion realizada con exito.");
+                response.setMessage("Operation performed successfully.");
                 response.setCode(200);
                 response.setStatus("success");
             }else{
-                return new ApiResponse(500, "Numero de DPI no valido.", "error");
+                return new ApiResponse(500, "DPI is not valid.", "error");
             }
             return response;
         }catch (Exception ex){
@@ -46,7 +43,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public ApiResponse updatePerson(Long id, Person person) {
+    public ApiResponse updatePerson(Integer id, Person person) {
         try {
             Person personObj = repository.findByPersonId(id);
 
@@ -61,33 +58,33 @@ public class PersonServiceImpl implements PersonService {
                 repository.save(personObj);
 
             }else {
-                return new ApiResponse(500, "Ha ocurrido un error.", "error");
+                return new ApiResponse(500, "Something went wrong.", "error");
             }
 
         }catch (Exception ex){
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito.", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
-    public ApiResponse deletePerson(Long id) {
+    public ApiResponse deletePerson(Integer id) {
         try{
             Person person = repository.findByPersonId(id);
 
             if(person != null){
                 repository.delete(person);
             }else{
-                return new ApiResponse(500, "Ha ocurrido un error.", "error");
+                return new ApiResponse(500, "Something went wrong.", "error");
             }
         }catch (Exception ex){
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito..", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
-    public Person getPersonById(Long id) {
+    public Person getPersonById(Integer id) {
         try{
             return repository.findByPersonId(id);
         }catch (Exception ex){

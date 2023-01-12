@@ -12,7 +12,7 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Intege
     BankAccount findByAccountId(int id);
 
     @Query("FROM BankAccount WHERE dpi = ?1")
-    BankAccount findByDpi(Long id);
+    BankAccount findByDpi(Integer id);
 
     //select cb.idcuentabancaria, cb.dpi, u.nombreusuario, cb.saldo from cuentabancaria cb join usuario u on cb.dpi = u.dpi;
     //@Query("select cb.bankAccountId, cb.dpi, u.userName, cb.balance from BankAccount ba join User u on cb.dpi = u.dpi;")

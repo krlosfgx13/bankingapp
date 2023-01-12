@@ -8,8 +8,8 @@ import java.util.List;
 public interface PersonService {
 
     ApiResponse createPerson(Person person);
-    ApiResponse updatePerson(Long id, Person person);
-    ApiResponse deletePerson(Long id);
-    Person getPersonById(Long id);
+    ApiResponse updatePerson(Integer id, Person person);
+    ApiResponse deletePerson(Integer id);
+    Person getPersonById(Integer id);
     List<Person> getAllPersons();
 }

@@ -3,22 +3,22 @@ package com.project.banking.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CuentaBancaria", schema = "bankingapp")
+@Table(name = "bank_account", schema = "bankingapp")
 public class BankAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdCuentaBancaria")
+    @Column(name = "bank_account_id")
     private Integer bankAccountId;
 
-    @Column(name = "IdBanco")
+    @Column(name = "bank_id")
     private Integer bankId;
 
-    @Column(name = "Saldo")
+    @Column(name = "balance")
     private float balance;
 
-    @Column(name = "Dpi")
-    private Long dpi;
+    @Column(name = "person_id")
+    private Integer personId;
 
     public Integer getBankAccountId() {
         return bankAccountId;
@@ -32,8 +32,8 @@ public class BankAccount {
         return balance;
     }
 
-    public Long getDpi() {
-        return dpi;
+    public Integer getPersonId() {
+        return personId;
     }
 
     public void setBankAccountId(Integer bankAccountId) {
@@ -48,7 +48,7 @@ public class BankAccount {
         this.balance = balance;
     }
 
-    public void setDpi(Long dpi) {
-        this.dpi = dpi;
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
     }
 }

@@ -3,18 +3,18 @@ package com.project.banking.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "MonedaBanco", schema = "bankingapp")
+@Table(name = "currency_bank", schema = "bankingapp")
 public class BankCurrency {
 
     @Id
-    @Column(name = "IdMonedaBanco")
+    @Column(name = "currency_bank_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bankCurrencyId;
 
-    @Column(name = "IdBanco")
+    @Column(name = "bank_id")
     private Integer bankId;
 
-    @Column(name = "IdMoneda")
+    @Column(name = "currency_id")
     private Integer currencyId;
 
     public Integer getBankCurrencyId() {

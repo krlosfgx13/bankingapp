@@ -3,16 +3,16 @@ package com.project.banking.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Moneda", schema = "bankingapp")
+@Table(name = "currency", schema = "bankingapp")
 public class Currency {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "IdMoneda")
+    @Column(name = "currency_id")
     private Long currencyId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Descripcion")
+    @Column(name = "description")
     private CurrencyEnum description;
 
     public Long getCurrencyId() {

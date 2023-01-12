@@ -10,37 +10,44 @@ import javax.persistence.Table;
 public class Person {
 
     @Id
-    @Column(name = "Dpi")
-    private Long dpi;
+    @Column(name = "person_id")
+    private Integer personId;
 
-    @Column(name = "PrimerNombre")
+    @Column(name = "dpi")
+    private String dpi;
+
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "SegundoNombre")
+    @Column(name = "second_name")
     private String secondName;
 
-    @Column(name = "TercerNombre")
+    @Column(name = "third_name")
     private String thirdName;
 
-    @Column(name = "PrimerApellido")
+    @Column(name = "last_name")
     private String firstLastName;
 
-    @Column(name = "SegundoApellido")
+    @Column(name = "second_last_name")
     private String secondLastName;
 
-    @Column(name = "Direccion")
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "TelefonoMovil")
+    @Column(name = "phone_number")
     private Long phoneNumber;
 
-    @Column(name = "TelefonoResidencial")
+    @Column(name = "home_phone_number")
     private Long homePhoneNumber;
 
-    @Column(name = "CorreoElectronico")
+    @Column(name = "email_address")
     private String emailAddress;
 
-    public Long getDpi() {
+    public Integer getPersonId() {
+        return personId;
+    }
+
+    public String getDpi() {
         return dpi;
     }
 
@@ -80,7 +87,11 @@ public class Person {
         return emailAddress;
     }
 
-    public void setDpi(Long dpi) {
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
+    }
+
+    public void setDpi(String dpi) {
         this.dpi = dpi;
     }
 

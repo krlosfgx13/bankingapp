@@ -11,6 +11,6 @@ public interface BankAccountService {
     ApiResponse updateBankAccount(Integer id, float amount);
     ApiResponse deleteBankAccount(Integer id);
     BankAccount getBankAccountById(Integer id);
-    BankAccount getBankAccountByDpi(Long id);
+    BankAccount getBankAccountByDpi(Integer id);
     List<BankAccount> getAllBankAccounts();
 }

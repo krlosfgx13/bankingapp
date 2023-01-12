@@ -34,18 +34,18 @@ public class UserServiceImpl implements UserService {
     public ApiResponse createUser(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         try {
             if(user.getUserName() == "" || user.getPassword() == ""){
-                return new ApiResponse(500, "Llenar campos obligatorios.", "error");
+                return new ApiResponse(500, "Fill out mandatory fields.", "error");
             }
-            Person person = personService.getPersonById(user.getDpi());
+            Person person = personService.getPersonById(user.getUserAccountId());
             if (person != null) {
                 PasswordHash pbkdf2 = new PasswordHash();
                 user.setPassword(pbkdf2.createHash(user.getPassword()));
                 repository.save(user);
-                response.setMessage("Operacion realizada con exito.");
+                response.setMessage("Operation performed successfully.");
                 response.setCode(200);
                 response.setStatus("success");
             } else {
-                return new ApiResponse(500, "DPI no valido. Revisar que exista una persona con ese DPI.", "error");
+                return new ApiResponse(500, "Invalid DPI. Check that there is a person with this DPI number.", "error");
             }
             return response;
         } catch (Exception ex) {
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResponse updateUserPassword(Long id, User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public ApiResponse updateUserPassword(Integer id, User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         try {
             User userObj = repository.findByUserId(id);
             PasswordHash pbkdf2 = new PasswordHash();
@@ -65,32 +65,32 @@ public class UserServiceImpl implements UserService {
                 repository.save(userObj);
 
             } else {
-                return new ApiResponse(500, "Ha ocurrido un error.", "error");
+                return new ApiResponse(500, "Something went wrong.", "error");
             }
         } catch (Exception ex) {
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito.", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
-    public ApiResponse deleteUser(Long id) {
+    public ApiResponse deleteUser(Integer id) {
         try {
             User user = repository.findByUserId(id);
 
             if (user != null) {
                 repository.delete(user);
             } else {
-                return new ApiResponse(500, "Ha ocurrido un error.", "error");
+                return new ApiResponse(500, "Something went wrong.", "error");
             }
         } catch (Exception ex) {
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito.", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
-    public User getUserById(Long id) {
+    public User getUserById(Integer id) {
         try {
             return repository.findByUserId(id);
         } catch (Exception ex) {
@@ -151,13 +151,13 @@ public class UserServiceImpl implements UserService {
             }
 
         } catch(Exception ex){
-            System.out.println("Ha ocurrido un error: " + ex.getMessage());
+            System.out.println("Something went wrong: " + ex.getMessage());
             throw ex;
         } finally{
             conn.close();
         }
         response.setCode(200);
-        response.setMessage("Operacion realizada con exito.");
+        response.setMessage("Operation performed successfully.");
         response.setStatus("success");
         response.setListOfUsers(listOfUsers);
         return response;

@@ -1,11 +1,8 @@
 package com.project.banking.controller;
 
-import com.project.banking.model.Bank;
-import com.project.banking.model.Person;
 import com.project.banking.model.User;
 import com.project.banking.response.ApiResponse;
 import com.project.banking.response.UsersResponse;
-import com.project.banking.service.PersonService;
 import com.project.banking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +56,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public User getUserById(@PathVariable(value="id") Long id){
+    public User getUserById(@PathVariable(value="id") Integer id){
         try {
             return service.getUserById(id);
         }catch (Exception ex){
@@ -68,7 +65,7 @@ public class UserController {
     }
 
     @PutMapping("/user/{id}")
-    public ApiResponse updateUser(@PathVariable(value="id") Long id, @RequestBody User user){
+    public ApiResponse updateUser(@PathVariable(value="id") Integer id, @RequestBody User user){
         try {
             return service.updateUserPassword(id, user);
         }catch (Exception ex){
@@ -77,7 +74,7 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
-    public ApiResponse DeleteUser(@PathVariable(value="id") Long id){
+    public ApiResponse DeleteUser(@PathVariable(value="id") Integer id){
         try {
             return  service.deleteUser(id);
         }catch (Exception ex){

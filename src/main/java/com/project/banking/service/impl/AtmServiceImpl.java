@@ -35,11 +35,11 @@ public class AtmServiceImpl implements AtmService {
     public ApiResponse createAtm(Atm atm) {
         Bank bank = bankService.getBankById(atm.getBankId());
         if(bank == null){
-            return new ApiResponse(500, "Id Banco no valido.", "error");
+            return new ApiResponse(500, "Bank Id is not valid.", "error");
         }
         try{
             repository.save(atm);
-            response.setMessage("Operacion realizada con exito.");
+            response.setMessage("Operation performed successfully.");
             response.setCode(200);
             response.setStatus("success");
             return response;
@@ -57,13 +57,13 @@ public class AtmServiceImpl implements AtmService {
                 atmObj.setCashAvailable(amount);
                 repository.save(atmObj);
             }else {
-                return new ApiResponse(500, "Ha ocurrido un error.", "error");
+                return new ApiResponse(500, "Something went wrong.", "error");
             }
 
         }catch (Exception ex){
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito.", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
@@ -73,12 +73,12 @@ public class AtmServiceImpl implements AtmService {
             if(atm != null){
                 repository.delete(atm);
             }else{
-                return new ApiResponse(500, "Ha ocurrido un error.", "error");
+                return new ApiResponse(500, "Something went wrong.", "error");
             }
         }catch (Exception ex){
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito.", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override

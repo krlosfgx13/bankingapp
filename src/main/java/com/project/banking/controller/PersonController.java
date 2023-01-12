@@ -1,9 +1,7 @@
 package com.project.banking.controller;
 
-import com.project.banking.model.Bank;
 import com.project.banking.model.Person;
 import com.project.banking.response.ApiResponse;
-import com.project.banking.service.BankAccountService;
 import com.project.banking.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +35,7 @@ public class PersonController {
     }
 
     @GetMapping("/person/{id}")
-    public Person getPersonById(@PathVariable(value="id") Long id){
+    public Person getPersonById(@PathVariable(value="id") Integer id){
         try{
             return service.getPersonById(id);
         }catch (Exception ex){
@@ -46,7 +44,7 @@ public class PersonController {
     }
 
     @PutMapping("/person/{id}")
-    public ApiResponse updatePerson(@PathVariable(value="id") Long id, @RequestBody Person request){
+    public ApiResponse updatePerson(@PathVariable(value="id") Integer id, @RequestBody Person request){
         try{
             return service.updatePerson(id, request);
         }catch (Exception ex){
@@ -55,7 +53,7 @@ public class PersonController {
     }
 
     @DeleteMapping("/person/{id}")
-    public ApiResponse DeletePerson(@PathVariable(value="id") Long id){
+    public ApiResponse DeletePerson(@PathVariable(value="id") Integer id){
         try{
             return service.deletePerson(id);
         }catch (Exception ex){

@@ -9,25 +9,29 @@ import javax.persistence.Table;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Usuario", schema = "bankingapp")
+@Table(name = "user_account", schema = "bankingapp")
 public class User {
 
     @Id
-    @Column(name = "Dpi")
-    private Long dpi;
+    @Column(name = "user_account_id")
+    private Integer userAccountId;
 
-    @Column(name = "NombreUsuario")
+    @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "Password")
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "FechaCreacionUsuario")
+    @Column(name = "created_date")
     @CreationTimestamp
     private Timestamp createdDate;
 
-    public Long getDpi() {
-        return dpi;
+
+    @Column(name = "person_id")
+    private Integer personId;
+
+    public Integer getUserAccountId() {
+        return userAccountId;
     }
 
     public String getUserName() {
@@ -42,8 +46,8 @@ public class User {
         return createdDate;
     }
 
-    public void setDpi(Long dpi) {
-        this.dpi = dpi;
+    public void setUserAccountId(Integer userAccountId) {
+        this.userAccountId = userAccountId;
     }
 
     public void setUserName(String userName) {

@@ -9,14 +9,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Integer> {
     //In the query specification, classes and field names are used instead of tables and columns.
 
     @Query("FROM User WHERE userName = ?1")
     User findByUserName(String username);
 
     @Query("FROM User WHERE dpi = ?1")
-    User findByUserId(Long id);
+    User findByUserId(Integer id);
 
     @Query("SELECT password FROM User WHERE userName = ?1")
     String findByPassword(String username);

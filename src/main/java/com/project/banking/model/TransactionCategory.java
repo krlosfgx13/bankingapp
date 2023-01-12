@@ -5,16 +5,16 @@ import com.project.banking.service.TransactionTypeService;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CategoriaTransaccion", schema = "bankingapp")
+@Table(name = "transaction_category", schema = "bankingapp")
 public class TransactionCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdCategoriaTransaccion")
+    @Column(name = "transaction_category_id")
     private Integer transactionCategoryId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Descripcion")
+    @Column(name = "description")
     private TransactionCategoryEnum description;
 
     public Integer getTransactionCategoryId() {

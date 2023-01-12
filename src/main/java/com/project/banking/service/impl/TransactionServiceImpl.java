@@ -81,14 +81,14 @@ public class TransactionServiceImpl implements TransactionService {
                     transaction.setCurrencyId(currencyId);
                     repository.save(transaction);
 
-                    response.setMessage("Operacion realizada con exito.");
+                    response.setMessage("Operation performed successfully.");
                     response.setCode(200);
                     response.setStatus("success");
                 } else {
-                    return new ApiResponse(500, "Moneda no valida para este banco.", "error");
+                    return new ApiResponse(500, "Currency not valid for this bank.", "error");
                 }
             } else {
-                response.setMessage("Numero de cuenta no valido.");
+                response.setMessage("Account number is not valid.");
                 response.setCode(500);
                 response.setStatus("error");
             }
@@ -103,13 +103,13 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             Atm atm = atmService.getAtmById(atmId);
             if (atm == null) {
-                return new BalanceInquiryResponse(500, "Id Cajero Invalido.", "error");
+                return new BalanceInquiryResponse(500, "Atm Id is not valid.", "error");
             }
             User user = userService.getUserByUserName(userName);
             BalanceInquiryResponse response = new BalanceInquiryResponse();
             boolean isUserValid = userService.authenticateUser(userName, password);
             if (isUserValid) {
-                BankAccount bankAccount = bankAccountService.getBankAccountByDpi(user.getDpi());
+                BankAccount bankAccount = bankAccountService.getBankAccountByDpi(user.getUserAccountId());
                 if (bankAccount != null) {
                     if (atm.getBankId() == bankAccount.getBankId()) {
                         Transaction transaction = new Transaction();
@@ -120,17 +120,17 @@ public class TransactionServiceImpl implements TransactionService {
                         repository.save(transaction);
                         response.setBankAccount(bankAccount);
                         response.setCode(200);
-                        response.setMessage("Operacion realizada con exito.");
+                        response.setMessage("Operation performed successfully.");
                         response.setStatus("success");
                     } else {
-                        return new BalanceInquiryResponse(500, "Cajero y Numero de Cuenta no pertenecen al mismo Banco.", "error");
+                        return new BalanceInquiryResponse(500, "Atm and Account Number do not belong to the same bank.", "error");
                     }
                     return response;
                 } else {
-                    return new BalanceInquiryResponse(500, "Numero de cuenta no valido.", "error");
+                    return new BalanceInquiryResponse(500, "Account number is not valid.", "error");
                 }
             } else {
-                return new BalanceInquiryResponse(500, "Credenciales no validas.", "error");
+                return new BalanceInquiryResponse(500, "Invalid username or password.", "error");
             }
         } catch (Exception ex) {
             throw ex;
@@ -142,13 +142,13 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             Atm atm = atmService.getAtmById(atmId);
             if (atm == null) {
-                return new ApiResponse(500, "Id Cajero Invalido.", "error");
+                return new ApiResponse(500, "Atm Id is not valid.", "error");
             }
             User user = userService.getUserByUserName(userName);
             if (user != null) {
                 boolean isUserValid = userService.authenticateUser(userName, password);
                 if (isUserValid) {
-                    BankAccount bankAccount = bankAccountService.getBankAccountByDpi(user.getDpi());
+                    BankAccount bankAccount = bankAccountService.getBankAccountByDpi(user.getUserAccountId());
                     if (bankAccount != null) {
                         if (bankAccount.getBalance() >= amount) {
                             float balance = bankAccount.getBalance();
@@ -164,32 +164,32 @@ public class TransactionServiceImpl implements TransactionService {
                                     repository.save(transaction);
                                     bankAccountService.updateBankAccount(bankAccount.getBankAccountId(), balance - amount);
                                     atmService.updateAtm(atmId, atmCashAvailable - amount);
-                                    response.setMessage("Operacion realizada con exito.");
+                                    response.setMessage("Operation performed successfully.");
                                     response.setCode(200);
                                     response.setStatus("success");
                                 } else {
-                                    response.setMessage("Error, cantidad mayor al limite.");
+                                    response.setMessage("Error, is greater than limit.");
                                     response.setCode(500);
                                     response.setStatus("error");
                                 }
                             } else {
-                                return new ApiResponse(500, "Cajero y Numero de Cuenta no pertenecen al mismo Banco.", "error");
+                                return new ApiResponse(500, "Atm and Account Number do not belong to the same bank.", "error");
                             }
                         } else {
-                            return new ApiResponse(500, "Fondos Insuficientes.", "error");
+                            return new ApiResponse(500, "Insufficient funds.", "error");
                         }
                     } else {
-                        response.setMessage("Numero de cuenta invalido.");
+                        response.setMessage("Account number is not valid.");
                         response.setCode(500);
                         response.setStatus("error");
                     }
                 } else {
-                    response.setMessage("Credenciales no validas.");
+                    response.setMessage("Invalid credentials.");
                     response.setCode(500);
                     response.setStatus("error");
                 }
             } else {
-                response.setMessage("Usuario incorrecto.");
+                response.setMessage("Invalid user.");
                 response.setCode(500);
                 response.setStatus("error");
             }
@@ -240,18 +240,18 @@ public class TransactionServiceImpl implements TransactionService {
                         transaction.setCurrencyId(currencyId);
                         repository.save(transaction);
                     } else {
-                        return new ApiResponse(500, "Moneda no valida para este banco.", "error");
+                        return new ApiResponse(500, "Currency not valid for this bank.", "error");
                     }
                 } else {
-                    return new ApiResponse(500, "Banco no valido.", "error");
+                    return new ApiResponse(500, "Bank is not valid.", "error");
                 }
             } else {
-                return new ApiResponse(500, "Credenciales no validas.", "error");
+                return new ApiResponse(500, "Invalid credentials.", "error");
             }
         } catch (Exception ex) {
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito.", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
@@ -284,15 +284,15 @@ public class TransactionServiceImpl implements TransactionService {
                     transaction.setCurrencyId(currencyId);
                     repository.save(transaction);
                 } else {
-                    return new ApiResponse(500, "Moneda no valida para este banco.", "error");
+                    return new ApiResponse(500, "Currency not valid for this bank..", "error");
                 }
             } else {
-                return new ApiResponse(500, "Ha ocurrido un error.", "error");
+                return new ApiResponse(500, "Something went wrong.", "error");
             }
         } catch (Exception ex) {
             throw ex;
         }
-        return new ApiResponse(200, "Operacion realizada con exito.", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
@@ -329,25 +329,25 @@ public class TransactionServiceImpl implements TransactionService {
                         transaction.setCurrencyId(currencyId);
                         repository.save(transaction);
                     }else{
-                        return new ApiResponse(500, "Banco no cuenta con fondos necesarios para esta transaccion.", "error");
+                        return new ApiResponse(500, "Bank does not have sufficient funds for this transaction.", "error");
                     }
                 } else {
-                    return new ApiResponse(500, "Moneda no valida para este banco.", "error");
+                    return new ApiResponse(500, "Invalid currency for this bank.", "error");
                 }
 
             } else {
-                return new ApiResponse(500, "Id Cajero no valido.", "error");
+                return new ApiResponse(500, "Atm Id is not valid.", "error");
             }
         } catch (Exception ex) {
-            System.out.println("Ha ocurrido un error.");
+            System.out.println("Something went wrong.");
             System.out.println(ex.getMessage());
             System.out.println(ex.getStackTrace());
-            response.setMessage("Ha ocurrido un error.");
+            response.setMessage("Something went wrong.");
             response.setCode(500);
             response.setStatus("error");
             return response;
         }
-        return new ApiResponse(200, "Operacion realizada con exito.", "success");
+        return new ApiResponse(200, "Operation performed successfully.", "success");
     }
 
     @Override
@@ -384,13 +384,13 @@ public class TransactionServiceImpl implements TransactionService {
                 transactionLogList.add(log);
             }
         } catch (Exception ex) {
-            System.out.println("Ha ocurrido un error." + ex.getMessage());
+            System.out.println("Something went wrong." + ex.getMessage());
             throw ex;
         } finally {
             conn.close();
         }
         response.setCode(200);
-        response.setMessage("Operacion realizada con exito.");
+        response.setMessage("Operation performed successfully.");
         response.setStatus("success");
         response.setTransactionLogList(transactionLogList);
         return response;
