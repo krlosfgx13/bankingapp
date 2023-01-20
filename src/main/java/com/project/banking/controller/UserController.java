@@ -7,6 +7,7 @@ import com.project.banking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -36,6 +37,7 @@ public class UserController {
         }
     }
 
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/user")
     public List<User> getAllUsers(){
         try {

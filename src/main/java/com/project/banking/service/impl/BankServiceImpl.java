@@ -1,15 +1,11 @@
 package com.project.banking.service.impl;
 
-import com.project.banking.model.Atm;
 import com.project.banking.model.Bank;
 import com.project.banking.model.BankCurrency;
-import com.project.banking.model.CurrencyEnum;
-import com.project.banking.repository.BankCurrencyRepository;
 import com.project.banking.repository.BankRepository;
 import com.project.banking.response.ApiResponse;
 import com.project.banking.response.BankCurrencyData;
 import com.project.banking.response.BankCurrencyResponse;
-import com.project.banking.response.UsersData;
 import com.project.banking.service.BankCurrencyService;
 import com.project.banking.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +67,7 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public ApiResponse updateBank(Integer id, float amount) {
+    public ApiResponse updateBank(Integer id, double amount) {
         try {
             Bank bankObj = repository.findByBankId(id);
             if (bankObj != null) {

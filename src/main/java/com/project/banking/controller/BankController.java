@@ -8,6 +8,7 @@ import com.project.banking.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,7 @@ public class BankController {
         }
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     @GetMapping("/bank")
     public List<Bank> getAllBanks(){
         try{

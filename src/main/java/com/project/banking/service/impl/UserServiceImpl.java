@@ -1,8 +1,9 @@
 
 package com.project.banking.service.impl;
 
-import com.project.banking.component.PasswordHash;
 import com.project.banking.model.Person;
+import com.project.banking.model.Role;
+import com.project.banking.model.RoleEnum;
 import com.project.banking.model.User;
 import com.project.banking.response.UsersData;
 import com.project.banking.repository.UserRepository;
@@ -11,7 +12,16 @@ import com.project.banking.response.UsersResponse;
 import com.project.banking.service.PersonService;
 import com.project.banking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.sql.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -24,11 +34,20 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository repository;
+    UserRepository repository;
     ApiResponse response = new ApiResponse();
 
     @Autowired
     PersonService personService;
+
+    @Autowired
+    Pbkdf2PasswordEncoder pbkdf2PasswordEncoder;
+
+    @Autowired
+    EntityManager entityManager;
+
+    @Autowired
+    private  LocalContainerEntityManagerFactoryBean entityManagerBean;
 
     @Override
     public ApiResponse createUser(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -36,10 +55,9 @@ public class UserServiceImpl implements UserService {
             if(user.getUserName() == "" || user.getPassword() == ""){
                 return new ApiResponse(500, "Fill out mandatory fields.", "error");
             }
-            Person person = personService.getPersonById(user.getUserAccountId());
+            Person person = personService.getPersonById(user.getPersonId());
             if (person != null) {
-                PasswordHash pbkdf2 = new PasswordHash();
-                user.setPassword(pbkdf2.createHash(user.getPassword()));
+                user.setPassword(pbkdf2PasswordEncoder.encode(user.getPassword()));
                 repository.save(user);
                 response.setMessage("Operation performed successfully.");
                 response.setCode(200);
@@ -57,9 +75,7 @@ public class UserServiceImpl implements UserService {
     public ApiResponse updateUserPassword(Integer id, User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         try {
             User userObj = repository.findByUserId(id);
-            PasswordHash pbkdf2 = new PasswordHash();
-            String newPassword = pbkdf2.createHash(user.getPassword());
-
+            String newPassword = pbkdf2PasswordEncoder.encode(user.getPassword());
             if (userObj != null) {
                 userObj.setPassword(newPassword);
                 repository.save(userObj);
@@ -129,16 +145,16 @@ public class UserServiceImpl implements UserService {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/bankingapp","root","12345678");
-            String selectStatement = "select p.dpi, u.nombreusuario, p.primernombre, p.primerapellido, p.direccion, \n" +
-                    "p.telefonomovil, p.telefonoresidencial,\n" +
-                    "p.correoelectronico, u.fechacreacionusuario \n" +
-                    "from persona p \n" +
-                    "join usuario u on p.dpi = u.dpi";
+            String selectStatement = "select p.person_id, u.user_name, p.first_name, p.last_name, p.address, \n" +
+                    "p.phone_number, p.home_phone_number,\n" +
+                    "p.email_address, u.created_date \n" +
+                    "from person p \n" +
+                    "join user_account u on p.person_id = u.person_id";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(selectStatement);
            while(rs.next()){
                 UsersData users = new UsersData();
-                users.setDpi(rs.getLong(1));
+                users.setPersonId(rs.getInt(1));
                 users.setUserName(rs.getString(2));
                 users.setFirstName(rs.getString(3));
                 users.setLastName(rs.getString(4));
@@ -165,20 +181,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean authenticateUser(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        PasswordHash pbkdf2 = new PasswordHash();
-
-        //look for the username in the db by using the username.
         try {
             User user = repository.findByUserName(username);
             if (user != null) {
-                return pbkdf2.validatePassword(password, user.getPassword());
+                return pbkdf2PasswordEncoder.matches(password, user.getPassword());
             } else {
                 return false;
             }
-        } catch (NoSuchAlgorithmException ex) {
-            throw ex;
-        } catch (InvalidKeySpecException ex) {
+        } catch (Exception ex) {
             throw ex;
         }
+    }
+
+//    @Override
+//    public List<Role> getRolesFromUser(Integer userId) {
+//        String query = "select r.role_id, r.role_name \n" +
+//                "from user_role ur\n" +
+//                "join role r on ur.role_id = r.role_id\n" +
+//                "where user_account_id = ?";
+//        Query q = entityManager.createNativeQuery(query);
+//        q.setParameter(1, userId);
+//        return q.getResultList();
+//    }
+
+    @Override
+    public List<Role> getRolesFromUser(Integer userId) {
+        String query = "select r.role_id, r.role_name \n" +
+                "from user_role ur\n" +
+                "join role r on ur.role_id = r.role_id\n" +
+                "where user_account_id = :userId";
+        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(entityManagerBean.getDataSource());
+        SqlParameterSource params = new MapSqlParameterSource("userId", userId);
+        return jdbcTemplate.query(query, params, new BeanPropertyRowMapper<>(Role.class));
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public interface AtmService {
 
     ApiResponse createAtm(Atm atm);
-    ApiResponse updateAtm(Integer id, float amount);
+    ApiResponse updateAtm(Integer id, double amount);
     ApiResponse deleteAtm(Integer id);
     Atm getAtmById(Integer id);
     List<Atm> getAllAtms();

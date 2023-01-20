@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 
-    @Query("FROM Person WHERE dpi = ?1")
+    @Query("FROM Person WHERE person_id = ?1")
     Person findByPersonId(Integer id);
 }

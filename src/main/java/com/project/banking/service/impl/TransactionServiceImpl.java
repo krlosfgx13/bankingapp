@@ -38,12 +38,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     ApiResponse response = new ApiResponse();
 
-    private static final int DEPOSITO_MONETARIO_BANCARIO = 5;
-    private static final int CONSULTA_SALDO = 6;
-    private static final int RETIRO_MONETARIO = 7;
-    private static final int DEPOSITO_DOCUMENTO = 8;
-    private static final int INVERSION_MONETARIA = 9;
-    private static final int RECARCAR_CAJERO = 10;
+    private static final int DEPOSIT_MONEY = 1;
+    private static final int CHECK_BALANCE = 2;
+    private static final int WITHDRAW_MONEY = 3;
+    private static final int DEPOSIT_CHECK = 4;
+    private static final int MONETARY_INVESTMENT = 5;
+    private static final int RECHARGE_ATM = 6;
     private static final int CURRENCY_Q = 1;
     private static final int CURRENCY_$ = 2;
     private static final int CURRENCY_€ = 3;
@@ -58,7 +58,7 @@ public class TransactionServiceImpl implements TransactionService {
             if (bankAccount != null) {
                 BankCurrency bankCurrency = bankCurrencyService.getByBankAndCurrency(bankAccount.getBankId(), currencyId);
                 if (bankCurrency != null) {
-                    float balance = bankAccount.getBalance();
+                    double balance = bankAccount.getBalance();
                     switch (currencyId) {
                         case CURRENCY_Q:
                             amount = amount;
@@ -74,7 +74,7 @@ public class TransactionServiceImpl implements TransactionService {
                     }
                     bankAccountService.updateBankAccount(bankAccountId, balance + amount);
                     Transaction transaction = new Transaction();
-                    transaction.setTransactionTypeId(DEPOSITO_MONETARIO_BANCARIO);
+                    transaction.setTransactionTypeId(DEPOSIT_MONEY);
                     transaction.setBankId(bankAccount.getBankId());
                     transaction.setBankAccountId(bankAccountId);
                     transaction.setAmount(amount);
@@ -109,11 +109,11 @@ public class TransactionServiceImpl implements TransactionService {
             BalanceInquiryResponse response = new BalanceInquiryResponse();
             boolean isUserValid = userService.authenticateUser(userName, password);
             if (isUserValid) {
-                BankAccount bankAccount = bankAccountService.getBankAccountByDpi(user.getUserAccountId());
+                BankAccount bankAccount = bankAccountService.getBankAccountByPersonId(user.getPersonId());
                 if (bankAccount != null) {
                     if (atm.getBankId() == bankAccount.getBankId()) {
                         Transaction transaction = new Transaction();
-                        transaction.setTransactionTypeId(CONSULTA_SALDO);
+                        transaction.setTransactionTypeId(CHECK_BALANCE);
                         transaction.setBankAccountId(bankAccount.getBankAccountId());
                         transaction.setCurrencyId(CURRENCY_Q);
                         transaction.setAtmId(atmId);
@@ -148,15 +148,15 @@ public class TransactionServiceImpl implements TransactionService {
             if (user != null) {
                 boolean isUserValid = userService.authenticateUser(userName, password);
                 if (isUserValid) {
-                    BankAccount bankAccount = bankAccountService.getBankAccountByDpi(user.getUserAccountId());
+                    BankAccount bankAccount = bankAccountService.getBankAccountByPersonId(user.getPersonId());
                     if (bankAccount != null) {
                         if (bankAccount.getBalance() >= amount) {
-                            float balance = bankAccount.getBalance();
+                            double balance = bankAccount.getBalance();
                             if (bankAccount.getBankId() == atm.getBankId()) {
-                                float atmCashAvailable = atm.getCashAvailable();
+                                double atmCashAvailable = atm.getCashAvailable();
                                 if (amount <= 2000.0f) {
                                     Transaction transaction = new Transaction();
-                                    transaction.setTransactionTypeId(RETIRO_MONETARIO);
+                                    transaction.setTransactionTypeId(WITHDRAW_MONEY);
                                     transaction.setAtmId(atmId);
                                     transaction.setBankAccountId(bankAccount.getBankAccountId());
                                     transaction.setAmount(amount);
@@ -221,18 +221,18 @@ public class TransactionServiceImpl implements TransactionService {
                             amount *= 10;
                             break;
                     }
-                    float bankCashAvailable = issuingBank.getCashAvailable();
+                    double bankCashAvailable = issuingBank.getCashAvailable();
                     BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId);
-                    float balance = bankAccount.getBalance();
+                    double balance = bankAccount.getBalance();
                     Bank receivingBank = bankService.getBankById(bankAccount.getBankId());
                     BankCurrency bankCurrency = bankCurrencyService.getByBankAndCurrency(receivingBank.getBankId(), currencyId);
                     if (bankCurrency != null) {
-                        float cashAvailableReceivingBank = receivingBank.getCashAvailable();
+                        double cashAvailableReceivingBank = receivingBank.getCashAvailable();
                         bankService.updateBank(issuingBank.getBankId(), bankCashAvailable - amount);
                         bankAccountService.updateBankAccount(bankAccountId, balance + amount);
                         bankService.updateBank(bankAccount.getBankId(), cashAvailableReceivingBank + amount);
                         Transaction transaction = new Transaction();
-                        transaction.setTransactionTypeId(DEPOSITO_DOCUMENTO);
+                        transaction.setTransactionTypeId(DEPOSIT_CHECK);
                         transaction.setAtmId(atmId);
                         transaction.setBankAccountId(bankAccountId);
                         transaction.setBankId(receivingBank.getBankId());
@@ -261,7 +261,7 @@ public class TransactionServiceImpl implements TransactionService {
             if (bank != null) {
                 BankCurrency bankCurrency = bankCurrencyService.getByBankAndCurrency(bank.getBankId(), currencyId);
                 if (bankCurrency != null) {
-                    float bankCashAvailable = bank.getCashAvailable();
+                    double bankCashAvailable = bank.getCashAvailable();
                     switch (currencyId) {
                         case CURRENCY_Q:
                             amount = amount;
@@ -278,7 +278,7 @@ public class TransactionServiceImpl implements TransactionService {
 
                     bankService.updateBank(bankId, bankCashAvailable + amount);
                     Transaction transaction = new Transaction();
-                    transaction.setTransactionTypeId(INVERSION_MONETARIA);
+                    transaction.setTransactionTypeId(MONETARY_INVESTMENT);
                     transaction.setBankId(bankId);
                     transaction.setAmount(amount);
                     transaction.setCurrencyId(currencyId);
@@ -303,8 +303,8 @@ public class TransactionServiceImpl implements TransactionService {
                 Bank bank = bankService.getBankById(atm.getBankId());
                 BankCurrency bankCurrency = bankCurrencyService.getByBankAndCurrency(bank.getBankId(), currencyId);
                 if (bankCurrency != null) {
-                    float atmCashAvailable = atm.getCashAvailable();
-                    float bankCashAvailable = bank.getCashAvailable();
+                    double atmCashAvailable = atm.getCashAvailable();
+                    double bankCashAvailable = bank.getCashAvailable();
                     switch (currencyId) {
                         case CURRENCY_Q:
                             amount = amount;
@@ -322,7 +322,7 @@ public class TransactionServiceImpl implements TransactionService {
                         bankService.updateBank(atm.getBankId(), bankCashAvailable - amount);
                         atmService.updateAtm(atmId, atmCashAvailable + amount);
                         Transaction transaction = new Transaction();
-                        transaction.setTransactionTypeId(RECARCAR_CAJERO);
+                        transaction.setTransactionTypeId(RECHARGE_ATM);
                         transaction.setBankId(bank.getBankId());
                         transaction.setAtmId(atmId);
                         transaction.setAmount(amount);
@@ -358,15 +358,15 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/bankingapp", "root", "12345678");
-            String selectStatement = "select t.idtransaccion, tt.descripcion, t.monto, t.idcajero, t.idbanco, t.idcuentabancaria,\n" +
-                    "u.nombreusuario, m.descripcion, t.fechatransaccion, ct.descripcion \n" +
-                    "from transaccion t\n" +
-                    "join tipotransaccion tt on t.idtipotransaccion = tt.idtipotransaccion\n" +
-                    "join categoriatransaccion ct on tt.idcategoriatransaccion = ct.idcategoriatransaccion\n" +
-                    "join moneda m on t.idmoneda = m.idmoneda\n" +
-                    "left join cuentabancaria cb on t.idcuentabancaria = cb.idcuentabancaria\n" +
-                    "left join usuario u on cb.dpi = u.dpi\n" +
-                    "order by t.fechatransaccion desc";
+            String selectStatement = "select t.transaction_id, tt.description, t.amount, t.atm_id, t.bank_id, t.bank_account_id,\n" +
+                    "u.user_name, m.description, t.transaction_date, ct.description \n" +
+                    "from banking_transaction t\n" +
+                    "join transaction_type tt on t.transaction_type_id = tt.transaction_type_id\n" +
+                    "join transaction_category ct on tt.transaction_category_id = ct.transaction_category_id\n" +
+                    "join currency m on t.currency_id = m.currency_id\n" +
+                    "left join bank_account cb on t.bank_account_id = cb.bank_account_id\n" +
+                    "left join user_account u on cb.person_id = u.person_id\n" +
+                    "order by t.transaction_date desc";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(selectStatement);
             while (rs.next()) {

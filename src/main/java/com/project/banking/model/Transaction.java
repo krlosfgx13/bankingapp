@@ -15,7 +15,7 @@ public class Transaction {
     private Integer transactionTypeId;
 
     @Column(name = "amount")
-    private float amount;
+    private double amount;
 
     @Column(name = "atm_id")
     private Integer atmId;
@@ -37,7 +37,7 @@ public class Transaction {
         return transactionTypeId;
     }
 
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     }
 
@@ -65,7 +65,7 @@ public class Transaction {
         this.transactionTypeId = transactionTypeId;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

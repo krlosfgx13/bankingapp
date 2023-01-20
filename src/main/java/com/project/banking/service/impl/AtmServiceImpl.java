@@ -6,7 +6,6 @@ import com.project.banking.repository.AtmRepository;
 import com.project.banking.response.ApiResponse;
 import com.project.banking.service.AtmService;
 import com.project.banking.service.BankService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class AtmServiceImpl implements AtmService {
     }
 
     @Override
-    public ApiResponse updateAtm(Integer id, float amount) {
+    public ApiResponse updateAtm(Integer id, double amount) {
         try {
             Atm atmObj = repository.findByAtmId(id);
 

@@ -60,7 +60,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public ApiResponse updateBankAccount(Integer id, float amount) {
+    public ApiResponse updateBankAccount(Integer id, double amount) {
         try {
             BankAccount bankAccountObj = repository.findByAccountId(id);
             if(bankAccountObj != null){
@@ -100,9 +100,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         }
     }
 
-    public BankAccount getBankAccountByDpi(Integer id){
+    public BankAccount getBankAccountByPersonId(Integer id){
         try{
-            return repository.findByDpi(id);
+            return repository.findByPersonId(id);
         }catch (Exception ex){
             throw ex;
         }

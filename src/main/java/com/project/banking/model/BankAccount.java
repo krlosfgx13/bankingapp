@@ -15,7 +15,7 @@ public class BankAccount {
     private Integer bankId;
 
     @Column(name = "balance")
-    private float balance;
+    private double balance;
 
     @Column(name = "person_id")
     private Integer personId;
@@ -28,7 +28,7 @@ public class BankAccount {
         return bankId;
     }
 
-    public float getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -44,7 +44,7 @@ public class BankAccount {
         this.bankId = bankId;
     }
 
-    public void setBalance(float balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

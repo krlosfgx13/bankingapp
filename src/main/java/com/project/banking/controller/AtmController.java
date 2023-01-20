@@ -3,13 +3,9 @@ package com.project.banking.controller;
 import com.project.banking.model.Atm;
 import com.project.banking.response.ApiResponse;
 import com.project.banking.service.AtmService;
-import com.project.banking.service.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

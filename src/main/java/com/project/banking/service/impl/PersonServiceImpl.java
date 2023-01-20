@@ -20,7 +20,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public ApiResponse createPerson(Person person) {
         try{
-            String dpi = person.getPersonId().toString();
+            String dpi = person.getDpi();
             if(dpi.length() == 13){
                 if(person.getFirstName() == "" || person.getFirstLastName() == "" ||
                         person.getAddress() == ""){

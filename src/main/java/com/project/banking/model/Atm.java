@@ -18,7 +18,7 @@ public class Atm {
     private String address;
 
     @Column(name = "cash_available")
-    private float cashAvailable;
+    private double cashAvailable;
 
     public Integer getAtmId() {
         return atmId;
@@ -32,7 +32,7 @@ public class Atm {
         return address;
     }
 
-    public float getCashAvailable() {
+    public double getCashAvailable() {
         return cashAvailable;
     }
 
@@ -48,7 +48,7 @@ public class Atm {
         this.address = address;
     }
 
-    public void setCashAvailable(float cashAvailable) {
+    public void setCashAvailable(double cashAvailable) {
         this.cashAvailable = cashAvailable;
     }
 }

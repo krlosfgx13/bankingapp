@@ -3,7 +3,7 @@ package com.project.banking.response;
 import java.sql.Timestamp;
 
 public class UsersData {
-    private Long dpi;
+    private Integer personId;
     private String userName;
     private String firstName;
     private String lastName;
@@ -13,8 +13,8 @@ public class UsersData {
     private String emailAddress;
     private Timestamp creationDate;
 
-    public Long getDpi() {
-        return dpi;
+    public Integer getPersonId() {
+        return personId;
     }
 
     public String getUserName() {
@@ -49,8 +49,8 @@ public class UsersData {
         return creationDate;
     }
 
-    public void setDpi(Long dpi) {
-        this.dpi = dpi;
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
     }
 
     public void setUserName(String userName) {

@@ -1,15 +1,13 @@
 package com.project.banking.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "Persona", schema = "bankingapp")
+@Table(name = "person", schema = "bankingapp")
 public class Person {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id")
     private Integer personId;
 
@@ -35,7 +33,7 @@ public class Person {
     private String address;
 
     @Column(name = "phone_number")
-    private Long phoneNumber;
+    private String phoneNumber;
 
     @Column(name = "home_phone_number")
     private Long homePhoneNumber;
@@ -75,7 +73,7 @@ public class Person {
         return address;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -119,7 +117,7 @@ public class Person {
         this.address = address;
     }
 
-    public void setPhoneNumber(Long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

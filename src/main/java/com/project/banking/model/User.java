@@ -2,17 +2,22 @@ package com.project.banking.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "user_account", schema = "bankingapp")
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = -7978400592301557132L;
+
+    public User(){
+
+    }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_account_id")
     private Integer userAccountId;
 
@@ -25,7 +30,6 @@ public class User {
     @Column(name = "created_date")
     @CreationTimestamp
     private Timestamp createdDate;
-
 
     @Column(name = "person_id")
     private Integer personId;
@@ -60,5 +64,13 @@ public class User {
 
     public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Integer getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
     }
 }

@@ -1,12 +1,8 @@
 package com.project.banking.controller;
 
-import com.project.banking.model.Atm;
-import com.project.banking.model.Bank;
 import com.project.banking.model.BankAccount;
 import com.project.banking.response.ApiResponse;
-import com.project.banking.service.AtmService;
 import com.project.banking.service.BankAccountService;
-import com.project.banking.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
