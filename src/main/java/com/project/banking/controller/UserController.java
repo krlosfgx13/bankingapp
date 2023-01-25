@@ -47,7 +47,7 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8090", allowedHeaders = "*")
+    @CrossOrigin(origins = "http://localhost:8080", allowedHeaders = "*")
     @GetMapping("/userdata")
     public UsersResponse getAllUsersData(){
         try {

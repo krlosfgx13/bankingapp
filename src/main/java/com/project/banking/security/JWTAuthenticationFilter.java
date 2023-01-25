@@ -20,7 +20,10 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.project.banking.security.SecurityConstants.*;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    public JWTAuthenticationFilter() {
+    private AuthenticationManager authenticationManager;
+
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
         setFilterProcessesUrl("/api/login");
     }
 
@@ -29,8 +32,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws AuthenticationException {
         try {
             User credentials = new ObjectMapper().readValue(req.getInputStream(), User.class);
-            return new UsernamePasswordAuthenticationToken(credentials.getUserName(),
-                    credentials.getPassword(), new ArrayList<>());
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUserName(),
+                    credentials.getPassword(), new ArrayList<>()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -41,7 +44,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication auth) throws IOException, ServletException {
         try{
             String token = JWT.create()
-                    .withSubject(auth.getPrincipal().toString())
+                    .withSubject(((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername())
                     .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                     .sign(HMAC512(SECRET.getBytes()));
             res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);

@@ -22,11 +22,6 @@ public class SecurityConfiguration {
     private UserDetailsServiceImpl userDetailsService;
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
     public JWTAuthorizationFilter jwtAuthorizationFilter(){
         return new JWTAuthorizationFilter();
     }
@@ -39,10 +34,17 @@ public class SecurityConfiguration {
         return pbkdf2;
     }
 
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors().and().csrf().disable().authorizeRequests()
+        //http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_IN_URL).permitAll()
                 .antMatchers(HttpMethod.GET, "/api/user").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/atm").hasRole("ADMIN")
@@ -55,9 +57,19 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.POST, "/api//transaction/monetaryInvestment").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api//transaction/rechargeAtm").hasRole("ADMIN")
                 .and()
-                .addFilter(new JWTAuthenticationFilter())
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))))
                 .addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.headers().frameOptions().sameOrigin();
         return http.build();
     }
+
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//
+//        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+//        source.registerCorsConfiguration("/**", corsConfiguration);
+//
+//        return source;
+//    }
 }

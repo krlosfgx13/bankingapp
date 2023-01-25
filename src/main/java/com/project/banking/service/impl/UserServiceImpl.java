@@ -40,8 +40,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     PersonService personService;
 
-    @Autowired
-    Pbkdf2PasswordEncoder pbkdf2PasswordEncoder;
+//    @Autowired
+//    Pbkdf2PasswordEncoder pbkdf2PasswordEncoder;
 
     @Autowired
     EntityManager entityManager;
@@ -49,8 +49,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private  LocalContainerEntityManagerFactoryBean entityManagerBean;
 
+
     @Override
     public ApiResponse createUser(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder("pepper", 24, 10000, 256);
+        pbkdf2PasswordEncoder.setEncodeHashAsBase64(true);
         try {
             if(user.getUserName() == "" || user.getPassword() == ""){
                 return new ApiResponse(500, "Fill out mandatory fields.", "error");
@@ -73,6 +76,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse updateUserPassword(Integer id, User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder("pepper", 24, 10000, 256);
+        pbkdf2PasswordEncoder.setEncodeHashAsBase64(true);
         try {
             User userObj = repository.findByUserId(id);
             String newPassword = pbkdf2PasswordEncoder.encode(user.getPassword());
@@ -181,6 +186,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean authenticateUser(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder("pepper", 24, 10000, 256);
+        pbkdf2PasswordEncoder.setEncodeHashAsBase64(true);
         try {
             User user = repository.findByUserName(username);
             if (user != null) {
