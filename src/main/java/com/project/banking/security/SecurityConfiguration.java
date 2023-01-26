@@ -43,8 +43,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.cors().and().csrf().disable().authorizeRequests()
-        //http.csrf().disable().authorizeRequests()
+        //http.cors().and().csrf().disable().authorizeRequests()
+        http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_IN_URL).permitAll()
                 .antMatchers(HttpMethod.GET, "/api/user").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/atm").hasRole("ADMIN")
