@@ -11,10 +11,13 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -22,6 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
+@ContextConfiguration
+@TestPropertySource(value = {
+        "/config/shared/application.properties",
+        "/config/shared/application-local.properties"
+        }
+)
 class BankingApplicationTests {
     @Autowired
     AtmService atmService;
@@ -85,6 +94,11 @@ class BankingApplicationTests {
      * withdraw money from the account
      * deposit money to that account with a paycheck
      * */
+
+    @Test
+    void testExample(){
+        atmService.test();
+    }
 
     //@Test
     void testConnection(){
@@ -153,7 +167,7 @@ class BankingApplicationTests {
 
         Atm atm = new Atm();
         atm.setBankId(20);
-        atm.setAddress("Centro Comercial Oakland Mall");
+        atm.setAddress("Mocking...");
         atm.setCashAvailable(200000.00f);
         response = atmService.createAtm(atm);
         assertEquals(mockResponse.getCode(), response.getCode());

@@ -6,10 +6,14 @@ import com.project.banking.repository.AtmRepository;
 import com.project.banking.response.ApiResponse;
 import com.project.banking.service.AtmService;
 import com.project.banking.service.BankService;
+import com.project.banking.utils.PropertiesLoader;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 public class AtmServiceImpl implements AtmService {
@@ -20,6 +24,9 @@ public class AtmServiceImpl implements AtmService {
 //    @Autowired
 //    BankService bankService;
 
+    @Value("${app.name}")
+    private String appName;
+
     private final AtmRepository repository;
     private final BankService bankService;
 
@@ -29,6 +36,17 @@ public class AtmServiceImpl implements AtmService {
     }
 
     ApiResponse response = new ApiResponse();
+
+    @Override
+    public String test(){
+        try{
+            Properties conf = PropertiesLoader.loadProperties();
+            return conf.getProperty("app.name");
+        }catch (IOException ex){
+            System.out.println(ex.getMessage());
+        }
+        return "";
+    }
 
     @Override
     public ApiResponse createAtm(Atm atm) {

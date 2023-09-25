@@ -14,7 +14,7 @@ public class TestController {
     @Autowired
     CurrencyService currencyService;
 
-    @PostMapping("/test")
+    @PostMapping("/config")
     public ResponseEntity<Object> createCurrency(@RequestBody Currency currency){
         currencyService.createCurrency(currency);
         return new ResponseEntity<>("Product is created successfully", HttpStatus.CREATED);
