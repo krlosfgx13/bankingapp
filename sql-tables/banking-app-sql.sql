@@ -1,102 +1,97 @@
-CREATE TABLE `banco` (
-  `IdBanco` int NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(128) NOT NULL,
-  `Direccion` varchar(256) NOT NULL,
-  `EfectivoDisponible` decimal(11,2) DEFAULT NULL,
-  PRIMARY KEY (`IdBanco`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+create database bankingapp;
+use bankingapp;
 
-CREATE TABLE `cajero` (
-  `IdCajero` int NOT NULL AUTO_INCREMENT,
-  `IdBanco` int NOT NULL,
-  `Direccion` varchar(256) NOT NULL,
-  `EfectivoDisponible` decimal(12,2) DEFAULT NULL,
-  PRIMARY KEY (`IdCajero`),
-  KEY `fk_cajero_banco` (`IdBanco`),
-  CONSTRAINT `fk_cajero_banco` FOREIGN KEY (`IdBanco`) REFERENCES `banco` (`IdBanco`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE person(
+person_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT
+dpi BIGINT PRIMARY KEY NOT NULL,
+first_name VARCHAR(40) NOT NULL,
+second_name VARCHAR(40) NULL,
+third_name VARCHAR(40) NULL,
+last_name VARCHAR(40) NOT NULL,
+second_last_name VARCHAR(40) NULL,
+address VARCHAR(256) NOT NULL,
+phone_number VARCHAR(40) NULL INT NULL,
+home_phone_number VARCHAR(40) NULL,
+email_address VARCHAR(128) NULL
+);
 
-CREATE TABLE `categoriatransaccion` (
-  `IdCategoriaTransaccion` int NOT NULL AUTO_INCREMENT,
-  `Descripcion` varchar(64) NOT NULL,
-  PRIMARY KEY (`IdCategoriaTransaccion`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE currency(
+currency_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+description VARCHAR(16) NOT NULL
+);
 
-CREATE TABLE `cuentabancaria` (
-  `IdCuentaBancaria` int NOT NULL AUTO_INCREMENT,
-  `IdBanco` int NOT NULL,
-  `saldo` decimal(10,2) NOT NULL,
-  `Dpi` bigint DEFAULT NULL,
-  PRIMARY KEY (`IdCuentaBancaria`),
-  KEY `fk_cuentabancaria_banco` (`IdBanco`),
-  KEY `fk_cuentabancaria_usuario` (`Dpi`),
-  CONSTRAINT `fk_cuentabancaria_banco` FOREIGN KEY (`IdBanco`) REFERENCES `banco` (`IdBanco`),
-  CONSTRAINT `fk_cuentabancaria_usuario` FOREIGN KEY (`Dpi`) REFERENCES `usuario` (`Dpi`)
-) ENGINE=InnoDB AUTO_INCREMENT=1136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE transaction_category(
+transaction_category_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+description VARCHAR(64) NOT NULL
+);
 
-CREATE TABLE `moneda` (
-  `IdMoneda` int NOT NULL AUTO_INCREMENT,
-  `Descripcion` varchar(16) NOT NULL,
-  PRIMARY KEY (`IdMoneda`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `monedabanco` (
-  `IdMonedaBanco` int NOT NULL AUTO_INCREMENT,
-  `IdBanco` int NOT NULL,
-  `IdMoneda` int NOT NULL,
-  PRIMARY KEY (`IdMonedaBanco`),
-  KEY `fk_monedabanco_banco` (`IdBanco`),
-  KEY `fk_monedabanco_moneda` (`IdMoneda`),
-  CONSTRAINT `fk_monedabanco_banco` FOREIGN KEY (`IdBanco`) REFERENCES `banco` (`IdBanco`),
-  CONSTRAINT `fk_monedabanco_moneda` FOREIGN KEY (`IdMoneda`) REFERENCES `moneda` (`IdMoneda`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE bank(
+bank_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+name VARCHAR(128) NOT NULL,
+address VARCHAR(256) NOT NULL,
+cash_available  DECIMAL(9,2) NOT NULL
+);
 
-CREATE TABLE `persona` (
-  `Dpi` bigint NOT NULL,
-  `PrimerNombre` varchar(40) NOT NULL,
-  `SegundoNombre` varchar(40) DEFAULT NULL,
-  `TercerNombre` varchar(40) DEFAULT NULL,
-  `PrimerApellido` varchar(40) DEFAULT NULL,
-  `SegundoApellido` varchar(40) DEFAULT NULL,
-  `Direccion` varchar(256) NOT NULL,
-  `TelefonoMovil` bigint DEFAULT NULL,
-  `TelefonoResidencial` bigint DEFAULT NULL,
-  `CorreoElectronico` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`Dpi`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE currency_bank(
+bank_id INT NOT NULL,
+currency_id INT NOT NULL,
 
-CREATE TABLE `tipotransaccion` (
-  `IdTipoTransaccion` int NOT NULL AUTO_INCREMENT,
-  `Descripcion` varchar(128) NOT NULL,
-  `IdCategoriaTransaccion` int NOT NULL,
-  PRIMARY KEY (`IdTipoTransaccion`),
-  KEY `fk_tipotransaccion_categoriatransaccion` (`IdCategoriaTransaccion`),
-  CONSTRAINT `fk_tipotransaccion_categoriatransaccion` FOREIGN KEY (`IdCategoriaTransaccion`) REFERENCES `categoriatransaccion` (`IdCategoriaTransaccion`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CONSTRAINT pk_bank_id__currency_id PRIMARY KEY(bank_id, currency_id),
+CONSTRAINT fk_currency_bank__bank FOREIGN KEY(bank_id) REFERENCES bank(bank_id),
+CONSTRAINT fk_currency_bank__currency FOREIGN KEY(currency_id) REFERENCES currency(currency_id)
+);
 
-CREATE TABLE `transaccion` (
-  `IdTransaccion` int NOT NULL AUTO_INCREMENT,
-  `IdTipoTransaccion` int NOT NULL,
-  `monto` decimal(10,2) NOT NULL,
-  `IdCajero` int DEFAULT NULL,
-  `IdBanco` int DEFAULT NULL,
-  `IdCuentaBancaria` int DEFAULT NULL,
-  `FechaTransaccion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `IdMoneda` int DEFAULT NULL,
-  PRIMARY KEY (`IdTransaccion`),
-  KEY `fk_transaccion_cajero` (`IdCajero`),
-  KEY `fk_transaccion_banco` (`IdBanco`),
-  KEY `fk_transaccion_cuentabancaria` (`IdCuentaBancaria`),
-  CONSTRAINT `fk_transaccion_banco` FOREIGN KEY (`IdBanco`) REFERENCES `banco` (`IdBanco`),
-  CONSTRAINT `fk_transaccion_cajero` FOREIGN KEY (`IdCajero`) REFERENCES `cajero` (`IdCajero`),
-  CONSTRAINT `fk_transaccion_cuentabancaria` FOREIGN KEY (`IdCuentaBancaria`) REFERENCES `cuentabancaria` (`IdCuentaBancaria`)
-) ENGINE=InnoDB AUTO_INCREMENT=173 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE bank_account(
+bank_account_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+bank_id INT NOT NULL,
+balance DECIMAL(6,2),
+CONSTRAINT fk_bank_account__bank FOREIGN KEY(bank_id) REFERENCES bank(bank_id)
+) AUTO_INCREMENT = 1111;
 
-CREATE TABLE `usuario` (
-  `Dpi` bigint NOT NULL,
-  `NombreUsuario` varchar(64) NOT NULL,
-  `Password` varchar(128) NOT NULL,
-  `FechaCreacionUsuario` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Dpi`),
-  CONSTRAINT `fk_usuario_persona` FOREIGN KEY (`Dpi`) REFERENCES `persona` (`Dpi`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE user_account(
+user_account_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+user_name VARCHAR(64) NOT NULL,
+password VARCHAR(128) NOT NULL,
+created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+person_id INT NOT NULL,
+
+CONSTRAINT fk_user_account__person FOREIGN KEY(person_id) REFERENCES person(person_id)
+);
+
+CREATE TABLE atm(
+atm_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+bank_id INT NOT NULL,
+address VARCHAR(256) NOT NULL,
+cash_available DECIMAL(4,2) NOT NULL,
+
+CONSTRAINT fk_atm__bank FOREIGN KEY(bank_id) REFERENCES bank(bank_id)
+);
+
+CREATE TABLE transaction_type(
+transaction_type_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+description VARCHAR(128) NOT NULL,
+transaction_category_id INT NOT NULL,
+
+CONSTRAINT fk_transaction_type__transaction_category FOREIGN KEY(transaction_category_id) 
+REFERENCES transaction_category(transaction_category_id)
+);
+
+CREATE TABLE banking_transaction(
+banking_transaction_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+transaction_type_id INT NOT NULL,
+amount DECIMAL(6,2) NULL,
+atm_id INT NULL,
+bank_id INT NULL,
+bank_account_id INT NULL,
+transaction_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fk_banking_transaction__atm FOREIGN KEY(atm_id) REFERENCES atm(atm_id),
+CONSTRAINT fk_banking_transaction__bank FOREIGN KEY(bank_id) REFERENCES bank(bank_id),
+CONSTRAINT fk_banking_transaction__bank_account FOREIGN KEY(bank_account_id) REFERENCES bank_account(bank_account_id)
+);
+
+
+
+
+

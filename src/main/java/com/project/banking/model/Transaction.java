@@ -1,6 +1,7 @@
 package com.project.banking.model;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "banking_transaction", schema = "bankingapp")
@@ -29,6 +30,9 @@ public class Transaction {
     @Column(name = "currency_id")
     private Integer currencyId;
 
+    @Column(name = "transaction_date")
+    private Timestamp transactionDate;
+
     public Integer getTransactionId() {
         return transactionId;
     }
@@ -55,6 +59,9 @@ public class Transaction {
 
     public Integer getCurrencyId() {
         return currencyId;
+    }
+    public Timestamp getTransactionDate() {
+        return transactionDate;
     }
 
     public void setTransactionId(Integer transactionId) {
@@ -83,5 +90,9 @@ public class Transaction {
 
     public void setCurrencyId(Integer currencyId) {
         this.currencyId = currencyId;
+    }
+
+    public void setTransactionDate(Timestamp transactionDate) {
+        this.transactionDate = transactionDate;
     }
 }

@@ -36,7 +36,7 @@ public class Person {
     private String phoneNumber;
 
     @Column(name = "home_phone_number")
-    private Long homePhoneNumber;
+    private String homePhoneNumber;
 
     @Column(name = "email_address")
     private String emailAddress;
@@ -77,7 +77,7 @@ public class Person {
         return phoneNumber;
     }
 
-    public Long getHomePhoneNumber() {
+    public String getHomePhoneNumber() {
         return homePhoneNumber;
     }
 
@@ -121,7 +121,7 @@ public class Person {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setHomePhoneNumber(Long homePhoneNumber) {
+    public void setHomePhoneNumber(String homePhoneNumber) {
         this.homePhoneNumber = homePhoneNumber;
     }
 
