@@ -3,7 +3,7 @@ use bankingapp;
 
 CREATE TABLE person(
 person_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT
-dpi BIGINT PRIMARY KEY NOT NULL,
+dpi VARCHAR(32) NOT NULL,
 first_name VARCHAR(40) NOT NULL,
 second_name VARCHAR(40) NULL,
 third_name VARCHAR(40) NULL,
@@ -89,6 +89,20 @@ transaction_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 CONSTRAINT fk_banking_transaction__atm FOREIGN KEY(atm_id) REFERENCES atm(atm_id),
 CONSTRAINT fk_banking_transaction__bank FOREIGN KEY(bank_id) REFERENCES bank(bank_id),
 CONSTRAINT fk_banking_transaction__bank_account FOREIGN KEY(bank_account_id) REFERENCES bank_account(bank_account_id)
+);
+
+create table role(
+role_id int primary key not null auto_increment,
+role_name varchar(32) not null
+);
+
+create table user_role(
+user_role_id int primary key not null auto_increment,
+user_account_id int not null,
+role_id int not null,
+
+CONSTRAINT fk_user_role_user_account FOREIGN KEY(user_account_id) REFERENCES user_account(user_account_id),
+CONSTRAINT fk_user_role_role FOREIGN KEY(role_id) REFERENCES role(role_id)
 );
 
 

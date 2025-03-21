@@ -46,6 +46,7 @@ public class SecurityConfiguration {
         //http.cors().and().csrf().disable().authorizeRequests()
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_IN_URL).permitAll()
+                .antMatchers(HttpMethod.POST, "/api/user").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/user").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/atm").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/bank").hasRole("ADMIN")
